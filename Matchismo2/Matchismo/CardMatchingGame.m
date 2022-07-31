@@ -12,8 +12,7 @@
 @property (nonatomic, readwrite) NSInteger score;
 @property (nonatomic, strong) NSMutableArray * cards; // of Card
 @property (nonatomic, strong) NSMutableArray * chosenCards; // of Card
-@property (nonatomic, readwrite) NSString* gameDescription;
-
+@property (nonatomic, readwrite) NSMutableAttributedString* gameDescription;
 @end
 
 
@@ -39,7 +38,7 @@ static const int COST_TO_CHOOSE = 1;
 - (instancetype) initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
 {
   self = [super init];
-  self.gameDescription = @"";
+  self.gameDescription = [[NSMutableAttributedString alloc] initWithString:@""];
   if (self)
   {
     for (int i = 0; i < count; i++){
@@ -58,7 +57,7 @@ static const int COST_TO_CHOOSE = 1;
 
 - (void) resetGame: (NSUInteger)count usingDeck:(Deck *)deck
 {
-  self.gameDescription = @"";
+  self.gameDescription = [[NSMutableAttributedString alloc] initWithString:@""];
   [self.cards removeAllObjects];
   [self.chosenCards removeAllObjects];
   for (int i = 0; i < count; i++){
@@ -78,69 +77,68 @@ static const int COST_TO_CHOOSE = 1;
   return (index < [self.cards count]) ? self.cards[index] : nil;
 }
 
++ (NSMutableAttributedString*) createMatchDescriptionMatchMode:(NSInteger) matchScore card1: (Card*) firstCard card2: (Card*) secondCard
+{
+  NSMutableAttributedString* gameDescription = nil;
+  if (matchScore){
+    gameDescription = [[NSMutableAttributedString alloc] initWithString: [NSString stringWithFormat:@"matched %@ %@ for %ld points.",
+                                                                          firstCard.contents, secondCard.contents, matchScore]];
+  }
+  else {
+    gameDescription = [[NSMutableAttributedString alloc] initWithString: [NSString stringWithFormat:@"%@ %@ don't match! %d point penalty!",
+                                                                          firstCard.contents, secondCard.contents, MISMATCH_PENALTY]];
+  }
+  return gameDescription;
+}
 
-- (void)tryMatchEasyMode:(Card *)card {
+
+//+ (NSMutableAttributedString*) createMatchDescriptionSethMode: (NSInteger) matchScore card: (Card*) card chosenCards: (NSArray*) chosenCards
+//{
+//  NSMutableAttributedString* gameDescription = nil;
+//  if (matchScore)
+//  {
+//    gameDescription = [];
+//  } else {
+//    gameDescription = [[NSMutableAttributedString alloc] initWithString:  [NSString stringWithFormat:@"%@ %@ don't match! %d point penalty!",
+//                                                                           firstCard.contents, secondCard.contents, MISMATCH_PENALTY]]];
+//  }
+//  return gameDescription;
+//}
+
+- (void)tryMatchMode:(Card *)card {
   for (Card* otherCard in self.cards) {
     if (otherCard.isChosen && !otherCard.isMatched){
       int matchScore = [card match:@[otherCard]];
+      self.gameDescription = [CardMatchingGame createMatchDescriptionMatchMode: matchScore card1 :card card2: otherCard];
       if (matchScore){
-        self.gameDescription = [NSString stringWithFormat:@"matched %@ %@ for %d points.",
-                                card.contents, otherCard.contents, matchScore];
         self.score += matchScore * MATCH_BONUS;
         otherCard.matched = YES;
         card.matched = YES;
       }
       else{
-        self.gameDescription = [NSString stringWithFormat:@"%@ %@ don't match! %d point penalty!",
-                                card.contents, otherCard.contents, MISMATCH_PENALTY];
         self.score -= MISMATCH_PENALTY;
         otherCard.chosen = NO;
       }
       break; // can only choose two cards for now
     }
   }
+
   self.score -= COST_TO_CHOOSE;
   card.chosen = YES;
 }
 
 
-+ (int) calculateScore: (NSArray *) chosenCards
-{
+- (void) tryMatchSetMode: (Card *)card {
   int matchScore = 0;
-  for (int i = 0; i < [chosenCards count];i++){
-    for (int j = i+1; j < [chosenCards count]; j++){
-      Card* card = [chosenCards objectAtIndex:i];
-      Card* otherCard = [chosenCards objectAtIndex:j];
-      matchScore += [card match:@[otherCard]] * MATCH_BONUS;
-      if (!matchScore){
-        matchScore -= MISMATCH_PENALTY;
-      }
-    }
-  }
-  return matchScore;
-}
-
-- (void) tryMatchHardMode: (Card *)card {
-  if ([self.chosenCards count] < NUM_CARDS_TO_MATCH)
+  [self.chosenCards addObject:card];
+  if ([self.chosenCards count] == NUM_CARDS_TO_MATCH)
   {
-    [self.chosenCards addObject:card];
-  }
-  int matchScore = 0;
-  if ([_chosenCards count] == NUM_CARDS_TO_MATCH)
-  {
-    matchScore = [CardMatchingGame calculateScore:self.chosenCards];
+    [self.chosenCards removeObject:card];
+    matchScore = [card match: self.chosenCards] * MATCH_BONUS;
     BOOL didmatch = matchScore > 0 ? YES : NO;
-    NSString* cardContents1 = ((Card*)[self.chosenCards objectAtIndex:0]).contents;
-    NSString* cardContents2 = ((Card*)[self.chosenCards objectAtIndex:1]).contents;
-    NSString* cardContents3 = ((Card*)[self.chosenCards objectAtIndex:2]).contents;
-    if (didmatch){
-      self.gameDescription = [NSString stringWithFormat:@"matched %@ %@ %@ for %d points.",
-                              cardContents1,cardContents2, cardContents3, matchScore];
-    }
-    else {
-      self.gameDescription = [NSString stringWithFormat:@"%@ %@ %@ don't match! %d point penalty!",
-                              cardContents1,cardContents2, cardContents3, MISMATCH_PENALTY];
-    }
+    matchScore = didmatch? matchScore : (matchScore - MISMATCH_PENALTY);
+//    self.gameDescription = [];
+    [self.chosenCards addObject:card];
     for (Card* otherCard in self.chosenCards)
     {
       otherCard.matched = didmatch;
@@ -166,15 +164,16 @@ static const int COST_TO_CHOOSE = 1;
     {
       card.chosen = NO;
       [self.chosenCards removeObject:card];
-      self.gameDescription = @"";
+      self.gameDescription = [[NSMutableAttributedString alloc] initWithString:@""];
     }
-    else if (mode == easyMode){
+    else if (mode == cardMatchMode){
       self.gameDescription = [NSString stringWithFormat:@"%@", card.contents];
-      [self tryMatchEasyMode:card];
+      [self tryMatchMode:card];
     }
-    else if (mode == hardMode){
+    else if (mode == setMode){
+      // todo - handle description
       self.gameDescription = [NSString stringWithFormat:@"%@", card.contents];
-      [self tryMatchHardMode:card];
+      [self tryMatchSetMode:card];
     }
   }
 }

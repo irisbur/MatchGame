@@ -8,40 +8,30 @@
 #import "ViewController.h"
 #import "PlayingCardDeck.h"
 #import "PlayingCard.h"
-#import "CardMatchingGame.h"
+
+
+
 
 @interface ViewController ()
 
-@property  (strong, nonatomic) Deck* deck;
-@property  (strong, nonatomic) CardMatchingGame* game;
-@property (strong, nonatomic)IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *modeSwitch;
-@property (weak, nonatomic) IBOutlet UILabel *gameDescriptionLabel;
+
 @end
 
 @implementation ViewController
+
 @synthesize deck = _deck;
 
 
 - (CardMatchingGame*) game{
-  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]                                                                      usingDeck:[self createDeck]];
+  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]  usingDeck:[self createDeck]];
   return _game;
 }
 
-
-- (Deck*) createDeck
-{
-  return [[PlayingCardDeck alloc] init];
-}
-
-
+// abstract
 - (IBAction)touchCardButton:(UIButton *)sender {
-  int mode = _modeSwitch.isOn ? hardMode : easyMode;
   int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
-  [self.game chooseCardAtIndex:chosenButtonIndex :mode];
+  [self.game chooseCardAtIndex:chosenButtonIndex :MATCH_MODE];
   [self updateUI];
-  self.modeSwitch.enabled = NO;
 }
 
 
@@ -49,8 +39,8 @@
   [self.game resetGame:[self.cardButtons count] usingDeck:[self createDeck]];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
   [self updateUI];
-  self.modeSwitch.enabled = YES;
 }
+
 
 -(void) updateUI
 {
@@ -65,14 +55,24 @@
   }
 }
 
-- (NSString*) titleForCard: (Card*) card
+// abstract
+- (NSString*) titleForCard: (Card*) card;
 {
-  return card.isChosen ? card.contents: @"";
+  return @"";
 }
 
-- (UIImage*) backgroundForCard: (Card*) card
+// abstract
+- (UIImage*) backgroundForCard: (Card*) card;
 {
-  return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
+  return [[UIImage alloc] init];
 }
+
+// abstract
+- (Deck*) createDeck; // abstract method
+{
+  return [[Deck alloc] init];
+}
+
 
 @end
+
