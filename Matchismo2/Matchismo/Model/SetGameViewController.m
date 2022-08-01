@@ -20,18 +20,20 @@
 @implementation SetGameViewController
 
 const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"open":@1};
-//const static NSDictionary* cardColorStringToUIColor =
-//                  @{@"red": [UIColor redColor], @"green" :[UIColor greenColor],
-//                    @"purple": [UIColor purpleColor]};
 
 - (Deck*) createDeck
 {
   return [[SetCardDeck alloc] init];
 }
 
+- (void)viewDidLoad
+{
+  [super viewDidLoad];
+  [self updateUI];
+}
+
 - (IBAction)touchCardButton:(UIButton *)sender {
   int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
-  NSLog(@"Score: %ld", self.game.score);
   [self.game chooseCardAtIndex:chosenButtonIndex :SET_MODE];
   [self updateUI];
 }
@@ -64,15 +66,46 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
       [cardButton layer].borderWidth = 1.0;
     }
     else{
-//      [cardButton layer].borderColor = UIColor.grayColor.CGColor;
       [cardButton layer].borderWidth = 0.0;
     }
     [cardButton setAttributedTitle:[self createCardString:card] forState:UIControlStateNormal];
     [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
     cardButton.enabled = !card.isMatched;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-    self.gameDescriptionLabel.text = self.game.gameDescription;
   }
+  self.gameDescriptionLabel.attributedText = [self createTurnDescription];
+}
+
+
+
+- (NSMutableAttributedString*) createTurnDescription
+{
+  NSMutableAttributedString* turnDescription = [[NSMutableAttributedString alloc] initWithString:@""];
+  if ([self.game.currentTurnProperties.chosenCards count] == 1){
+    turnDescription = [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
+  }
+  else if ([self.game.currentTurnProperties.chosenCards count] == 2){
+    NSMutableAttributedString* firstCardContent = [self createCardString:
+                                                   [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
+    NSMutableAttributedString* secondCardContent = [self createCardString:
+                                                    [self.game.currentTurnProperties.chosenCards objectAtIndex:1]];
+    [firstCardContent appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
+    [firstCardContent appendAttributedString: secondCardContent];
+    turnDescription = firstCardContent;
+
+  } else if ([self.game.currentTurnProperties.chosenCards count] == 3){
+    turnDescription = [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
+    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
+    [turnDescription appendAttributedString: [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:1]]];
+    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
+    [turnDescription appendAttributedString: [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:2]]];
+    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: self.game.currentTurnProperties.createEndOfTurnDescription]];
+    
+  }
+  [self.gameHistoryAttributedText appendAttributedString:[[NSMutableAttributedString alloc] initWithString: @"\n"]];
+  [self.gameHistoryAttributedText appendAttributedString: turnDescription];
+
+  return turnDescription;
 }
 
 - (NSMutableAttributedString*) createCardString : (SetPlayingCard*) card
@@ -87,7 +120,9 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
   if ([card.shading isEqualToString: @"open" ] ){
     [attributesDictionary setObject: @2 forKey:NSStrokeWidthAttributeName];
   }
-  NSMutableAttributedString* CardContent = [[NSMutableAttributedString alloc] initWithString:initialString attributes:attributesDictionary];
+  NSMutableAttributedString* CardContent = [[NSMutableAttributedString alloc]
+                                            initWithString:initialString
+                                            attributes:attributesDictionary];
   return CardContent;
 }
 

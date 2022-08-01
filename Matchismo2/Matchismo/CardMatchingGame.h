@@ -8,6 +8,7 @@
 
 #import "Deck.h"
 #import "Card.h"
+#import "Turn.h"
 
 typedef NS_ENUM(NSUInteger, GameMode) {
     cardMatchMode = 2,
@@ -22,7 +23,8 @@ typedef NS_ENUM(NSUInteger, GameMode) {
 - (void) chooseCardAtIndex:(NSUInteger) index :(NSUInteger) mode;
 - (Card*) cardAtIndex:(NSUInteger) index;
 - (void) resetGame: (NSUInteger)count usingDeck:(Deck *)deck;
-@property (nonatomic, readonly) NSMutableAttributedString* gameDescription;
+@property (nonatomic, readonly) Turn * currentTurnProperties; 
+@property (nonatomic, readonly) NSString* gameDescription;
 @property (nonatomic, readonly) NSInteger score;
 @end
 

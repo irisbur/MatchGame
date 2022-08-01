@@ -5,6 +5,7 @@
 //  Created by Iris Burmistrov on 25/07/2022.
 //
 
+#import <UIKit/UIKit.h>
 #import "SetPlayingCard.h"
 
 @implementation SetPlayingCard
@@ -72,6 +73,7 @@
 }
 
 
+
 + (BOOL) singleAttributeMatch : (NSString*) attributeFirstCard
                      secondAtt:(NSString*) attributeSecondCard
                       thirdAtt:(NSString*) attributeThirdCard
@@ -103,13 +105,11 @@
 {
   int score = 0;
   if ([otherCards count] == 2){
-    NSLog(@"Ani kan");
     SetPlayingCard* card2 = [otherCards firstObject];
     SetPlayingCard* card3 = [otherCards objectAtIndex:1];
     BOOL didMatch = [SetPlayingCard doesAttributesMatch:self secondCard:card2 thirdCard:card3];
     score = didMatch ? 1 : 0;
   }
-  NSLog(@"Im here");
   return score;
 }
 

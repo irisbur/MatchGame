@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import "PlayingCardDeck.h"
 #import "PlayingCard.h"
+#import "HistoryViewController.h"
 
 
 
@@ -20,6 +21,19 @@
 @implementation ViewController
 
 @synthesize deck = _deck;
+
+- (NSMutableAttributedString *)gameHistoryAttributedText
+{
+  if (!_gameHistoryAttributedText) _gameHistoryAttributedText = [[NSMutableAttributedString alloc] init];
+
+  return _gameHistoryAttributedText;
+}
+
+- (NSMutableAttributedString *) prevTurnDescription
+{
+  if (!_prevTurnDescription) _prevTurnDescription = [[NSMutableAttributedString alloc] init];
+  return _prevTurnDescription;
+}
 
 
 - (CardMatchingGame*) game{
@@ -38,21 +52,22 @@
 - (IBAction)touchResetButton {
   [self.game resetGame:[self.cardButtons count] usingDeck:[self createDeck]];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+  self.gameHistoryAttributedText = [[NSMutableAttributedString alloc] init];
   [self updateUI];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Show History"]) {
+        if ([segue.destinationViewController isKindOfClass:[HistoryViewController class]]) {
+          HistoryViewController *hvc = (HistoryViewController *)segue.destinationViewController;
+            hvc.gameHistoryAttributedString = self.gameHistoryAttributedText;
+        }
+    }
+}
 
 -(void) updateUI
 {
-  for (UIButton* cardButton in self.cardButtons){
-    int cardButtonIndex = (int) [self.cardButtons indexOfObject:cardButton];
-    Card* card = [self.game cardAtIndex:cardButtonIndex];
-    [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
-    [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
-    cardButton.enabled = !card.isMatched;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-    self.gameDescriptionLabel.text = [NSString stringWithFormat:@"%@", self.game.gameDescription];
-  }
 }
 
 // abstract
@@ -68,7 +83,7 @@
 }
 
 // abstract
-- (Deck*) createDeck; // abstract method
+- (Deck*) createDeck;
 {
   return [[Deck alloc] init];
 }
