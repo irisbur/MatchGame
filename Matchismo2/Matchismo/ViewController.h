@@ -15,11 +15,8 @@
 
 @property  (strong, nonatomic) Deck* deck;
 @property  (strong, nonatomic) CardMatchingGame* game;
-@property  (strong, nonatomic) NSMutableAttributedString* gameHistoryAttributedText;
-@property  (strong, nonatomic) NSMutableAttributedString* prevTurnDescription;
 @property (strong, nonatomic)IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *gameDescriptionLabel;
 - (IBAction)touchResetButton;
 -(void) updateUI;
 @end

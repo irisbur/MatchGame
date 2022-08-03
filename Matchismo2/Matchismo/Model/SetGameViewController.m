@@ -73,39 +73,6 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
     cardButton.enabled = !card.isMatched;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
   }
-  self.gameDescriptionLabel.attributedText = [self createTurnDescription];
-}
-
-
-
-- (NSMutableAttributedString*) createTurnDescription
-{
-  NSMutableAttributedString* turnDescription = [[NSMutableAttributedString alloc] initWithString:@""];
-  if ([self.game.currentTurnProperties.chosenCards count] == 1){
-    turnDescription = [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
-  }
-  else if ([self.game.currentTurnProperties.chosenCards count] == 2){
-    NSMutableAttributedString* firstCardContent = [self createCardString:
-                                                   [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
-    NSMutableAttributedString* secondCardContent = [self createCardString:
-                                                    [self.game.currentTurnProperties.chosenCards objectAtIndex:1]];
-    [firstCardContent appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
-    [firstCardContent appendAttributedString: secondCardContent];
-    turnDescription = firstCardContent;
-
-  } else if ([self.game.currentTurnProperties.chosenCards count] == 3){
-    turnDescription = [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:0]];
-    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
-    [turnDescription appendAttributedString: [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:1]]];
-    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @" "]] ;
-    [turnDescription appendAttributedString: [self createCardString: [self.game.currentTurnProperties.chosenCards objectAtIndex:2]]];
-    [turnDescription appendAttributedString: [[NSMutableAttributedString alloc] initWithString: self.game.currentTurnProperties.createEndOfTurnDescription]];
-    
-  }
-  [self.gameHistoryAttributedText appendAttributedString:[[NSMutableAttributedString alloc] initWithString: @"\n"]];
-  [self.gameHistoryAttributedText appendAttributedString: turnDescription];
-
-  return turnDescription;
 }
 
 - (NSMutableAttributedString*) createCardString : (SetPlayingCard*) card

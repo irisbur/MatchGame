@@ -12,7 +12,6 @@
 
 @implementation MatchGameViewController
 
-
 // abstract
 - (IBAction)touchCardButton:(UIButton *)sender {
   int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
@@ -20,9 +19,8 @@
   [self updateUI];
 }
 
--(void) updateUI
-{
-  for (UIButton* cardButton in self.cardButtons){
+-(void) updateUI {
+  for (UIButton* cardButton in self.cardButtons) {
     int cardButtonIndex = (int) [self.cardButtons indexOfObject:cardButton];
     Card* card = [self.game cardAtIndex:cardButtonIndex];
     [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
@@ -30,28 +28,17 @@
     cardButton.enabled = !card.isMatched;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
   }
-  self.gameDescriptionLabel.text = [NSString stringWithFormat:@"%@", self.game.gameDescription];
-  NSMutableAttributedString* currentTurnDescription = [[NSMutableAttributedString alloc] initWithString: self.game.gameDescription];
-  if (![currentTurnDescription isEqualToAttributedString: self.prevTurnDescription]){
-    [self.gameHistoryAttributedText appendAttributedString: [[NSMutableAttributedString alloc] initWithString: @"\n"]];
-    [self.gameHistoryAttributedText appendAttributedString: currentTurnDescription];
-  }
 }
 
-- (Deck*) createDeck
-{
+- (Deck *)createDeck {
   return [[PlayingCardDeck alloc] init];
 }
 
-
-- (NSString*) titleForCard: (Card*) card;
-{
+- (NSString *)titleForCard:(Card *)card {
   return card.isChosen ? card.contents: @"";
 }
 
-
-- (UIImage*) backgroundForCard: (Card*) card;
-{
+- (UIImage*) backgroundForCard: (Card*) card {
   return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
 }
 
