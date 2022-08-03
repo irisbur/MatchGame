@@ -8,7 +8,9 @@
 #import "PlayingCardView.h"
 
 @interface PlayingCardView()
+
 @property (nonatomic) CGFloat faceCardScaleFactor;
+
 @end
 
 @implementation PlayingCardView

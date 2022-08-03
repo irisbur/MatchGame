@@ -15,6 +15,7 @@
 		B8BF3425288FDD690044116A /* MatchGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BF3424288FDD690044116A /* MatchGameViewController.m */; };
 		B8E4EE38289A5251007F6C8F /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4EE37289A5251007F6C8F /* PlayingCardView.m */; };
 		B8E4EE55289AAF42007F6C8F /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4EE53289AAF42007F6C8F /* Grid.m */; };
+		B8E4EE58289ABE9D007F6C8F /* SetCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4EE57289ABE9D007F6C8F /* SetCardView.m */; };
 		B8FECE1128858D940084EA93 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B8FECE1028858D940084EA93 /* AppDelegate.m */; };
 		B8FECE1428858D940084EA93 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B8FECE1328858D940084EA93 /* SceneDelegate.m */; };
 		B8FECE1728858D940084EA93 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8FECE1628858D940084EA93 /* ViewController.m */; };
@@ -64,6 +65,8 @@
 		B8E4EE37289A5251007F6C8F /* PlayingCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
 		B8E4EE53289AAF42007F6C8F /* Grid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grid.m; sourceTree = "<group>"; };
 		B8E4EE54289AAF42007F6C8F /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
+		B8E4EE56289ABE9D007F6C8F /* SetCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetCardView.h; sourceTree = "<group>"; };
+		B8E4EE57289ABE9D007F6C8F /* SetCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SetCardView.m; sourceTree = "<group>"; };
 		B8FECE0C28858D940084EA93 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8FECE0F28858D940084EA93 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B8FECE1028858D940084EA93 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -137,17 +140,15 @@
 		B8FECE0E28858D940084EA93 /* Matchismo */ = {
 			isa = PBXGroup;
 			children = (
-				B8FECE0F28858D940084EA93 /* AppDelegate.h */,
-				B8FECE1028858D940084EA93 /* AppDelegate.m */,
 				B8E4EE54289AAF42007F6C8F /* Grid.h */,
 				B8E4EE53289AAF42007F6C8F /* Grid.m */,
-				B8FECE1228858D940084EA93 /* SceneDelegate.h */,
-				B8FECE1328858D940084EA93 /* SceneDelegate.m */,
 				B8FECE1528858D940084EA93 /* ViewController.h */,
 				B8FECE1628858D940084EA93 /* ViewController.m */,
 				B8BF3423288FDD690044116A /* MatchGameViewController.h */,
 				B8BF3424288FDD690044116A /* MatchGameViewController.m */,
 				B8FECE1828858D940084EA93 /* Main.storyboard */,
+				B8E4EE56289ABE9D007F6C8F /* SetCardView.h */,
+				B8E4EE57289ABE9D007F6C8F /* SetCardView.m */,
 				B8E4EE36289A5251007F6C8F /* PlayingCardView.h */,
 				B8E4EE37289A5251007F6C8F /* PlayingCardView.m */,
 				B8BF3417288E94420044116A /* SetGameViewController.h */,
@@ -170,6 +171,10 @@
 				B8FECE1D28858D950084EA93 /* LaunchScreen.storyboard */,
 				B8FECE2028858D950084EA93 /* Info.plist */,
 				B8FECE2128858D950084EA93 /* main.m */,
+				B8FECE0F28858D940084EA93 /* AppDelegate.h */,
+				B8FECE1028858D940084EA93 /* AppDelegate.m */,
+				B8FECE1228858D940084EA93 /* SceneDelegate.h */,
+				B8FECE1328858D940084EA93 /* SceneDelegate.m */,
 			);
 			path = Matchismo;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				B8FECE1128858D940084EA93 /* AppDelegate.m in Sources */,
 				B8FECE2228858D950084EA93 /* main.m in Sources */,
 				B8BF3422288EC0DD0044116A /* SetPlayingCard.m in Sources */,
+				B8E4EE58289ABE9D007F6C8F /* SetCardView.m in Sources */,
 				B8BF3425288FDD690044116A /* MatchGameViewController.m in Sources */,
 				B8E4EE55289AAF42007F6C8F /* Grid.m in Sources */,
 				B8FECE1428858D940084EA93 /* SceneDelegate.m in Sources */,

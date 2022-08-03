@@ -35,8 +35,8 @@
                                     <action selector="touchResetButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="C7J-C2-M7X"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uoa-gy-0uW" customClass="PlayingCardView">
-                                <rect key="frame" x="16" y="88" width="77" height="103"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uoa-gy-0uW">
+                                <rect key="frame" x="16" y="88" width="358" height="550"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <gestureRecognizers/>
@@ -57,6 +57,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="playingCardView" destination="Uoa-gy-0uW" id="EHd-UQ-AvF"/>
+                        <outlet property="playingCardsView" destination="Uoa-gy-0uW" id="Ab9-hA-OrD"/>
                         <outlet property="scoreLabel" destination="cQe-Hj-LOx" id="laz-P4-ARp"/>
                     </connections>
                 </viewController>
@@ -67,7 +68,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1255" y="-1027"/>
+            <point key="canvasLocation" x="1253.8461538461538" y="-1027.2511848341233"/>
         </scene>
         <!--SetGameViewController-->
         <scene sceneID="222-P1-iUO">
@@ -95,6 +96,11 @@
                                     <action selector="touchResetButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="13f-hS-zTd"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-gQ-bag">
+                                <rect key="frame" x="100" y="275" width="190" height="295"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Yrf-LP-Vxe"/>
                         <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -106,7 +112,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VRZ-9x-nt0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="794" y="-181"/>
+            <point key="canvasLocation" x="793.84615384615381" y="-181.27962085308056"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="tPW-bJ-WmN">

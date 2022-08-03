@@ -10,7 +10,7 @@
 
 @interface MatchGameViewController : ViewController
 
-@property (weak, nonatomic) IBOutlet PlayingCardView *playingCardView;
+@property (weak, nonatomic) IBOutlet UIView *playingCardsView;
 
 @end
 

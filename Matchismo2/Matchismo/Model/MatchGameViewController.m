@@ -14,14 +14,21 @@
 
 @interface ViewController()
 
-
-@property (strong, nonatomic) NSArray*playingCardsView;
+@property (strong, nonatomic) NSArray* playingCards; // todo - check if of Card?
 
 @end
 
 @implementation MatchGameViewController
 
+const static NSUInteger numberOfCards = 30;
 
+- (Grid*) createGrid {
+  Grid* grid = [[Grid alloc] init];
+  grid.size = self.playingCardsView.frame.size;
+  grid.cellAspectRatio = self.playingCardsView.frame.size.width / self.playingCardsView.frame.size.height;
+  grid.minimumNumberOfCells = numberOfCards;
+  return grid;
+}
 
 - (Deck *)createDeck {
   return [[PlayingCardDeck alloc] init];
@@ -38,26 +45,26 @@
 - (void)drawRandomPlayingCard
 {
   Card *card = [self.deck drawRandomCard];
-  NSLog(@"%@", card.contents);
   if ([card isKindOfClass:[PlayingCard class]]) {
       PlayingCard *playingCard = (PlayingCard *)card;
-      self.playingCardView.rank = playingCard.rank;
-      self.playingCardView.suit = playingCard.suit;
+    // todo - set card to someone in view
+    // self.playingCardView.rank = playingCard.rank;
+    // self.playingCardView.suit = playingCard.suit;
   }
 }
 
 - (IBAction)swipe:(UISwipeGestureRecognizer *)sender
 {
 
-    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
-    self.playingCardView.faceUp = !self.playingCardView.faceUp;
+//    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
+//    self.playingCardView.faceUp = !self.playingCardView.faceUp;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
-    [self.playingCardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.playingCardView action:@selector(pinch:)]];
+//    [self.playingCardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.playingCardView action:@selector(pinch:)]];
 }
 
 @end
