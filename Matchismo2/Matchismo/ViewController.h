@@ -15,9 +15,9 @@
 
 @property  (strong, nonatomic) Deck* deck;
 @property  (strong, nonatomic) CardMatchingGame* game;
-@property (strong, nonatomic)IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (strong, nonatomic)NSArray* cardViews;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-- (IBAction)touchResetButton;
+//- (IBAction)touchResetButton;
 -(void) updateUI;
 @end
 

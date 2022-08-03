@@ -33,7 +33,7 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
-  int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
+  int chosenButtonIndex = (int) [self.cardViews indexOfObject:sender];
   [self.game chooseCardAtIndex:chosenButtonIndex :SET_MODE];
   [self updateUI];
 }
@@ -58,8 +58,8 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
 
 -(void) updateUI
 {
-  for (UIButton* cardButton in self.cardButtons){
-    int cardButtonIndex = (int) [self.cardButtons indexOfObject:cardButton];
+  for (UIButton* cardButton in self.cardViews){
+    int cardButtonIndex = (int) [self.cardViews indexOfObject:cardButton];
     Card* card = [self.game cardAtIndex:cardButtonIndex];
     if (card.isChosen){
       [cardButton layer].borderColor = UIColor.grayColor.CGColor;

@@ -5,30 +5,23 @@
 //  Created by Iris Burmistrov on 26/07/2022.
 //
 
-#import "MatchGameViewController.h"
-#import "PlayingCardDeck.h"
-#import "PlayingCard.h"
 #import "CardMatchingGame.h"
+#import "MatchGameViewController.h"
+#import "PlayingCard.h"
+#import "PlayingCardDeck.h"
+#import "PlayingCardView.h"
+
+
+@interface ViewController()
+
+
+@property (strong, nonatomic) NSArray*playingCardsView;
+
+@end
 
 @implementation MatchGameViewController
 
-// abstract
-- (IBAction)touchCardButton:(UIButton *)sender {
-  int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
-  [self.game chooseCardAtIndex:chosenButtonIndex :MATCH_MODE];
-  [self updateUI];
-}
 
--(void) updateUI {
-  for (UIButton* cardButton in self.cardButtons) {
-    int cardButtonIndex = (int) [self.cardButtons indexOfObject:cardButton];
-    Card* card = [self.game cardAtIndex:cardButtonIndex];
-    [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
-    [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
-    cardButton.enabled = !card.isMatched;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-  }
-}
 
 - (Deck *)createDeck {
   return [[PlayingCardDeck alloc] init];
@@ -40,6 +33,31 @@
 
 - (UIImage*) backgroundForCard: (Card*) card {
   return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
+}
+
+- (void)drawRandomPlayingCard
+{
+  Card *card = [self.deck drawRandomCard];
+  NSLog(@"%@", card.contents);
+  if ([card isKindOfClass:[PlayingCard class]]) {
+      PlayingCard *playingCard = (PlayingCard *)card;
+      self.playingCardView.rank = playingCard.rank;
+      self.playingCardView.suit = playingCard.suit;
+  }
+}
+
+- (IBAction)swipe:(UISwipeGestureRecognizer *)sender
+{
+
+    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
+    self.playingCardView.faceUp = !self.playingCardView.faceUp;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+  // Do any additional setup after loading the view, typically from a nib.
+    [self.playingCardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.playingCardView action:@selector(pinch:)]];
 }
 
 @end
