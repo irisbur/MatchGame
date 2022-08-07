@@ -7,8 +7,11 @@
 
 
 #import "ViewController.h"
+#import "SetCardView.h"
 
 @interface SetGameViewController : ViewController
+
+@property (weak, nonatomic) IBOutlet SetCardView *setCardView;
 
 
 @end

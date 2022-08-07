@@ -54,7 +54,7 @@
 
 + (NSArray *) validSuits
 {
-  return @[@"●", @"■", @"▲"];
+  return @[@"diamond", @"oval", @"squiggle"];
 }
 
 + (NSArray *) validColors;

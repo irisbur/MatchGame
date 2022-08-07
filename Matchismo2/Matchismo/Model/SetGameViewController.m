@@ -68,10 +68,26 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
     else{
       [cardButton layer].borderWidth = 0.0;
     }
-    [cardButton setAttributedTitle:[self createCardString:card] forState:UIControlStateNormal];
+    if ([card isKindOfClass:[SetPlayingCard class]]) {
+      SetPlayingCard *setCard = (SetPlayingCard *)card;
+      [cardButton setAttributedTitle:[self createCardString:setCard] forState:UIControlStateNormal];
+    }
     [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
     cardButton.enabled = !card.isMatched;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+  }
+}
+
+- (void)drawRandomPlayingCard
+{
+  Card *card = [self.deck drawRandomCard];
+  if ([card isKindOfClass:[SetPlayingCard class]]) {
+    SetPlayingCard *setCard = (SetPlayingCard *)card;
+    // todo - set card to someone in view
+     self.setCardView.rank = setCard.rank;
+     self.setCardView.suit = setCard.suit;
+     self.setCardView.color = setCard.color;
+     self.setCardView.shading = setCard.shading;
   }
 }
 

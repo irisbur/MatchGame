@@ -11,7 +11,7 @@
 
 @property (nonatomic) NSUInteger rank;
 @property (nonatomic, strong) NSString* suit;
-@property (nonatomic, strong) NSString* symbol;
+@property (nonatomic, strong) NSString* color;
 @property (nonatomic, strong) NSString* shading;
 
 - (void) pinch: (UIPinchGestureRecognizer*) gesture;

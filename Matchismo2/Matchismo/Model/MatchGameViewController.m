@@ -46,16 +46,15 @@ const static NSUInteger numberOfCards = 30;
 {
   Card *card = [self.deck drawRandomCard];
   if ([card isKindOfClass:[PlayingCard class]]) {
-      PlayingCard *playingCard = (PlayingCard *)card;
+//      PlayingCard *playingCard = (PlayingCard *)card;
     // todo - set card to someone in view
-    // self.playingCardView.rank = playingCard.rank;
-    // self.playingCardView.suit = playingCard.suit;
+//     self.playingCardView.rank = playingCard.rank;
+//     self.playingCardView.suit = playingCard.suit;
   }
 }
 
 - (IBAction)swipe:(UISwipeGestureRecognizer *)sender
 {
-
 //    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
 //    self.playingCardView.faceUp = !self.playingCardView.faceUp;
 }
