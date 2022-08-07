@@ -243,10 +243,6 @@ const static float SYMBOL_HEIGHT_RATIO = 0.25;
   self.backgroundColor = nil;
   self.opaque = NO;
   self.contentMode = UIViewContentModeRedraw;
-  self.color = @"green";
-  self.shading = @"striped";
-  self.suit = @"squiggle";
-  self.rank = 3;
 }
 
 - (void)awakeFromNib

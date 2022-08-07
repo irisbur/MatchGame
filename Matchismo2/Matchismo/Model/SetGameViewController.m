@@ -12,102 +12,86 @@
 
 #define SET_MODE 3
 
-
 @interface SetGameViewController ()
 
 @end
 
 @implementation SetGameViewController
 
-const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"open":@1};
+-(NSUInteger) minNumOfCards{
+  return 12;
+}
+
+@synthesize deck = _deck;
+
+- (Deck *)deck
+{
+    if (!_deck) _deck = [[SetCardDeck alloc] init];
+    return _deck;
+}
 
 - (Deck*) createDeck
 {
   return [[SetCardDeck alloc] init];
 }
 
-- (void)viewDidLoad
+- (void) addCardsInGrid
 {
-  [super viewDidLoad];
-  [self updateUI];
+  Grid* grid = [self createGrid];
+  NSUInteger rows = [grid rowCount];
+  NSUInteger cols = [grid columnCount];
+  for (NSUInteger i = 0 ; i < rows; i++) {
+    for (NSUInteger j = 0 ; j < cols; j++ ){
+      CGRect frame = [grid frameOfCellAtRow:i inColumn:j];
+      SetCardView* cardView = [[SetCardView alloc] initWithFrame:frame];
+      [self drawRandomPlayingCard:cardView];
+      [self.cardsView addSubview:cardView];
+    }
+  }
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
-  int chosenButtonIndex = (int) [self.cardViews indexOfObject:sender];
-  [self.game chooseCardAtIndex:chosenButtonIndex :SET_MODE];
+//  int chosenButtonIndex = (int) [self.cardViews indexOfObject:sender];
+//  [self.game chooseCardAtIndex:chosenButtonIndex :SET_MODE];
   [self updateUI];
-}
-
-+ (UIColor* ) stringToUIColor: (SetPlayingCard*) card
-{
-  NSString* colorString = card.color;
-  UIColor* color = nil;
-  if ([colorString isEqualToString: @"red"])
-  {
-    color =[UIColor redColor];
-  }
-  else if ([colorString isEqualToString: @"green"]){
-    color = [UIColor greenColor];
-  }
-  else if ([colorString isEqualToString:@"purple"]){
-    color = [UIColor purpleColor];
-  }
-  return [color colorWithAlphaComponent: [shadeToAlpha[card.shading] floatValue]];
 }
 
 
 -(void) updateUI
 {
-  for (UIButton* cardButton in self.cardViews){
-    int cardButtonIndex = (int) [self.cardViews indexOfObject:cardButton];
-    Card* card = [self.game cardAtIndex:cardButtonIndex];
-    if (card.isChosen){
-      [cardButton layer].borderColor = UIColor.grayColor.CGColor;
-      [cardButton layer].borderWidth = 1.0;
-    }
-    else{
-      [cardButton layer].borderWidth = 0.0;
-    }
+//  for (UIButton* cardButton in self.cardViews){
+//    int cardButtonIndex = (int) [self.cardViews indexOfObject:cardButton];
+//    Card* card = [self.game cardAtIndex:cardButtonIndex];
+//    if (card.isChosen){
+//      [cardButton layer].borderColor = UIColor.grayColor.CGColor;
+//      [cardButton layer].borderWidth = 1.0;
+//    }
+//    else{
+//      [cardButton layer].borderWidth = 0.0;
+//    }
+//    if ([card isKindOfClass:[SetPlayingCard class]]) {
+//      SetPlayingCard *setCard = (SetPlayingCard *)card;
+//      [cardButton setAttributedTitle:[self createCardString:setCard] forState:UIControlStateNormal];
+//    }
+//    [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
+//    cardButton.enabled = !card.isMatched;
+//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+//  }
+}
+
+- (void)drawRandomPlayingCard : (SetCardView*) setCardView
+{
+    Card *card = [self.deck drawRandomCard];
     if ([card isKindOfClass:[SetPlayingCard class]]) {
       SetPlayingCard *setCard = (SetPlayingCard *)card;
-      [cardButton setAttributedTitle:[self createCardString:setCard] forState:UIControlStateNormal];
+      // todo - set card to someone in view
+      setCardView.rank = setCard.rank;
+      setCardView.suit = setCard.suit;
+      setCardView.color = setCard.color;
+      setCardView.shading = setCard.shading;
     }
-    [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
-    cardButton.enabled = !card.isMatched;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-  }
 }
 
-- (void)drawRandomPlayingCard
-{
-  Card *card = [self.deck drawRandomCard];
-  if ([card isKindOfClass:[SetPlayingCard class]]) {
-    SetPlayingCard *setCard = (SetPlayingCard *)card;
-    // todo - set card to someone in view
-     self.setCardView.rank = setCard.rank;
-     self.setCardView.suit = setCard.suit;
-     self.setCardView.color = setCard.color;
-     self.setCardView.shading = setCard.shading;
-  }
-}
-
-- (NSMutableAttributedString*) createCardString : (SetPlayingCard*) card
-{
-  NSString* initialString = card.suit;
-  for (int i = 1; i < card.rank; i++){
-    initialString = [initialString stringByAppendingString:card.suit];
-  }
-  NSMutableDictionary *attributesDictionary = [NSMutableDictionary dictionary];
-  UIColor * cardTextColor = [SetGameViewController stringToUIColor:card];
-  [attributesDictionary setObject:cardTextColor forKey:NSForegroundColorAttributeName];
-  if ([card.shading isEqualToString: @"open" ] ){
-    [attributesDictionary setObject: @2 forKey:NSStrokeWidthAttributeName];
-  }
-  NSMutableAttributedString* CardContent = [[NSMutableAttributedString alloc]
-                                            initWithString:initialString
-                                            attributes:attributesDictionary];
-  return CardContent;
-}
 
 - (NSString*) titleForCard: (Card*) card
 {
@@ -117,6 +101,20 @@ const static NSDictionary* shadeToAlpha = @{@"solid": @1, @"striped" : @0.2 ,@"o
 - (UIImage*) backgroundForCard: (Card*) card
 {
   return [UIImage imageNamed: @"cardfront"];
+}
+
+- (void)viewDidLoad
+{
+  [super viewDidLoad];
+  // Do any additional setup after loading the view, typically from a nib.
+  [self createDeck];
+  [self addCardsInGrid];
+  for (UIView* cardView in [self.cardsView subviews]) {
+    if ([cardView isKindOfClass:[SetCardView class]]){
+      [cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:cardView action:@selector(pinch:)]];
+    }
+  }
+  [self updateUI];
 }
 
 @end

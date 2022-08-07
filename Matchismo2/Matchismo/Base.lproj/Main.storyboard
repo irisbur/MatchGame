@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21208.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="e7l-8e-Xs5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21208.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cew-YK-Ht6">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -24,8 +24,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uoa-gy-0uW">
+                                <rect key="frame" x="16" y="88" width="358" height="550"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.56284224989999998" blue="0.31881666180000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="dR7-HD-t4t" appends="YES" id="wQh-VM-JXH"/>
+                                </connections>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVQ-T5-1BO">
-                                <rect key="frame" x="37" y="680" width="106" height="35"/>
+                                <rect key="frame" x="16" y="680" width="106" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
@@ -35,15 +44,6 @@
                                     <action selector="touchResetButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="C7J-C2-M7X"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uoa-gy-0uW" customClass="PlayingCardView">
-                                <rect key="frame" x="16" y="88" width="358" height="550"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="dR7-HD-t4t" appends="YES" id="wQh-VM-JXH"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.0" green="0.56284224989999998" blue="0.31881666180000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -56,6 +56,7 @@
                     <navigationItem key="navigationItem" id="7JE-OJ-7mN"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="cardsView" destination="Uoa-gy-0uW" id="kp3-Kf-uC4"/>
                         <outlet property="playingCardsView" destination="Uoa-gy-0uW" id="Ab9-hA-OrD"/>
                         <outlet property="scoreLabel" destination="cQe-Hj-LOx" id="laz-P4-ARp"/>
                     </connections>
@@ -67,7 +68,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1253.8461538461538" y="-1027.2511848341233"/>
+            <point key="canvasLocation" x="734" y="-911"/>
         </scene>
         <!--SetGameViewController-->
         <scene sceneID="222-P1-iUO">
@@ -85,7 +86,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s17-hj-BWO">
-                                <rect key="frame" x="35" y="694" width="106" height="35"/>
+                                <rect key="frame" x="16" y="694" width="106" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
@@ -95,10 +96,21 @@
                                     <action selector="touchResetButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="13f-hS-zTd"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-gQ-bag" customClass="SetCardView">
-                                <rect key="frame" x="96" y="275" width="190" height="295"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecx-hD-lnh">
+                                <rect key="frame" x="268" y="694" width="106" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Add cards"/>
+                                <connections>
+                                    <action selector="touchResetButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="y1K-ci-L97"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-gQ-bag">
+                                <rect key="frame" x="16" y="95" width="358" height="557"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Yrf-LP-Vxe"/>
@@ -106,6 +118,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ooE-fq-AJL"/>
                     <connections>
+                        <outlet property="cardsView" destination="8g8-gQ-bag" id="xJJ-pU-erU"/>
                         <outlet property="scoreLabel" destination="GpX-ek-86X" id="fON-J4-Sbm"/>
                         <outlet property="setCardView" destination="8g8-gQ-bag" id="E08-K8-4Xc"/>
                     </connections>
@@ -181,9 +194,6 @@
     </scenes>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

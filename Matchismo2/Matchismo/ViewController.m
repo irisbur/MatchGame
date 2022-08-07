@@ -17,33 +17,30 @@
 
 @implementation ViewController
 
-@synthesize deck = _deck;
+
 
 
 - (CardMatchingGame*) game{
-  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count]  usingDeck:[self createDeck]];
+  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
   return _game;
 }
 
-- (Deck *)deck
-{
-    if (!_deck) _deck = [[PlayingCardDeck alloc] init];
-    return _deck;
+
+
+- (Grid*) createGrid {
+  Grid* grid = [[Grid alloc] init];
+  grid.size = self.cardsView.frame.size;
+  grid.cellAspectRatio = self.cardsView.frame.size.width / self.cardsView.frame.size.height;
+  grid.minimumNumberOfCells = self.minNumOfCards;
+  return grid;
 }
 
-// abstract
-//- (IBAction)touchCardButton:(UIButton *)sender {
-//  int chosenButtonIndex = (int) [self.cardButtons indexOfObject:sender];
-//  [self.game chooseCardAtIndex:chosenButtonIndex :MATCH_MODE];
-//  [self updateUI];
-//}
 
-
-//- (IBAction)touchResetButton {
-////  [self.game resetGame:[self.cardButtons count] usingDeck:[self createDeck]];
-//  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-//  [self updateUI];
-//}
+- (IBAction)touchResetButton {
+  [self.game resetGame:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+  [self updateUI];
+}
 
 -(void) updateUI
 {

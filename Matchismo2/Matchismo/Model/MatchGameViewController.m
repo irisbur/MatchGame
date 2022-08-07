@@ -22,12 +22,27 @@
 
 const static NSUInteger numberOfCards = 30;
 
-- (Grid*) createGrid {
-  Grid* grid = [[Grid alloc] init];
-  grid.size = self.playingCardsView.frame.size;
-  grid.cellAspectRatio = self.playingCardsView.frame.size.width / self.playingCardsView.frame.size.height;
-  grid.minimumNumberOfCells = numberOfCards;
-  return grid;
+@synthesize deck = _deck;
+
+- (Deck *)deck
+{
+    if (!_deck) _deck = [[PlayingCardDeck alloc] init];
+    return _deck;
+}
+
+- (void) addCardsInGrid
+{
+  Grid* grid = [self createGrid];
+  NSUInteger rows = [grid rowCount];
+  NSUInteger cols = [grid columnCount];
+  for (NSUInteger i = 0 ; i < rows; i++) {
+    for (NSUInteger j = 0 ; j < cols; j++ ){
+      CGRect frame = [grid frameOfCellAtRow:i inColumn:j];
+      PlayingCardView* cardView = [[PlayingCardView alloc] initWithFrame:frame];
+      [self drawRandomPlayingCard:cardView];
+      [self.cardsView addSubview:cardView];
+    }
+  }
 }
 
 - (Deck *)createDeck {
@@ -42,28 +57,37 @@ const static NSUInteger numberOfCards = 30;
   return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
 }
 
-- (void)drawRandomPlayingCard
+- (void)drawRandomPlayingCard : (PlayingCardView*) playingCardView
 {
   Card *card = [self.deck drawRandomCard];
   if ([card isKindOfClass:[PlayingCard class]]) {
-//      PlayingCard *playingCard = (PlayingCard *)card;
-    // todo - set card to someone in view
-//     self.playingCardView.rank = playingCard.rank;
-//     self.playingCardView.suit = playingCard.suit;
+      PlayingCard *playingCard = (PlayingCard *)card;
+//     todo - set card to someone in view
+     playingCardView.rank = playingCard.rank;
+     playingCardView.suit = playingCard.suit;
   }
+}
+
+-(NSUInteger) minNumOfCards{
+  return 30;
 }
 
 - (IBAction)swipe:(UISwipeGestureRecognizer *)sender
 {
-//    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
-//    self.playingCardView.faceUp = !self.playingCardView.faceUp;
+  //playingCardView.faceUp = !playingCardView.faceUp;
 }
+
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+  [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
-//    [self.playingCardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.playingCardView action:@selector(pinch:)]];
+  [self addCardsInGrid];
+  for (UIView* cardView in [self.cardsView subviews]) {
+    if ([cardView isKindOfClass:[PlayingCardView class]]){
+      [cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:cardView action:@selector(pinch:)]];
+    }
+  }
 }
 
 @end
