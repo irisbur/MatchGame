@@ -11,10 +11,12 @@
 #import "PlayingCardDeck.h"
 #import "PlayingCardView.h"
 
-
-
 @implementation MatchGameViewController
 
+
+-(NSUInteger) minNumOfCards{
+  return 30;
+}
 
 @synthesize deck = _deck;
 
@@ -22,6 +24,10 @@
 {
     if (!_deck) _deck = [[PlayingCardDeck alloc] init];
     return _deck;
+}
+
+- (Deck *)createDeck {
+  return [[PlayingCardDeck alloc] init];
 }
 
 - (void) addCardsInGrid
@@ -32,43 +38,18 @@
     for (NSUInteger j = 0 ; j < cols; j++ ){
       CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
       PlayingCardView* cardView = [[PlayingCardView alloc] initWithFrame:frame];
-//      [self drawRandomPlayingCard : cardView cardIndex:(j*rows + i)];
       [self.cardsView addSubview:cardView];
       [self.cards addObject:cardView];
     }
   }
 }
 
-- (Deck *)createDeck {
-  return [[PlayingCardDeck alloc] init];
-}
-
 - (NSString *)titleForCard:(Card *)card {
   return card.isChosen ? card.contents: @"";
 }
 
-- (IBAction)touchResetButton {
-  [self.game resetGame:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
-  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-  [self updateUI];
-}
-
 - (UIImage*) backgroundForCard: (Card*) card {
   return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
-}
-
-//- (void) drawRandomPlayingCard : (PlayingCardView*) playingCardView cardIndex: (NSUInteger) cardInx {
-//  Card *card = [self.game cardAtIndex: cardInx];
-//  if ([card isKindOfClass:[PlayingCard class]]) {
-//      PlayingCard *playingCard = (PlayingCard *)card;
-////     todo - set card to someone in view
-//     playingCardView.rank = playingCard.rank;
-//     playingCardView.suit = playingCard.suit;
-//  }
-//}
-
--(NSUInteger) minNumOfCards{
-  return 30;
 }
 
 -(void) updateUI {
@@ -95,7 +76,6 @@
   playingCardView.faceUp = !playingCardView.faceUp;
   [self updateUI];
 }
-
 
 - (void)viewDidLoad
 {

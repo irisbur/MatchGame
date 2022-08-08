@@ -102,9 +102,6 @@
                                 <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Add cards"/>
-                                <connections>
-                                    <action selector="touchResetButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="y1K-ci-L97"/>
-                                </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-gQ-bag">
                                 <rect key="frame" x="16" y="95" width="358" height="557"/>
@@ -114,15 +111,23 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Yrf-LP-Vxe"/>
                         <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="mfx-mF-wfs" appends="YES" id="fJP-YD-TZO"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="ooE-fq-AJL"/>
                     <connections>
                         <outlet property="cardsView" destination="8g8-gQ-bag" id="xJJ-pU-erU"/>
                         <outlet property="scoreLabel" destination="GpX-ek-86X" id="fON-J4-Sbm"/>
-                        <outlet property="setCardView" destination="8g8-gQ-bag" id="E08-K8-4Xc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VRZ-9x-nt0" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="mfx-mF-wfs">
+                    <connections>
+                        <action selector="tapOnCard:" destination="e7l-8e-Xs5" id="Nap-p9-aTC"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="793.84615384615381" y="-181.27962085308056"/>
         </scene>

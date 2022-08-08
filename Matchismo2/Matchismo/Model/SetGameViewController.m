@@ -12,10 +12,6 @@
 
 #define SET_MODE 3
 
-@interface SetGameViewController ()
-
-@end
-
 @implementation SetGameViewController
 
 -(NSUInteger) minNumOfCards{
@@ -37,66 +33,51 @@
 
 - (void) addCardsInGrid
 {
-  Grid* grid = [self createGrid];
-  NSUInteger rows = [grid rowCount];
-  NSUInteger cols = [grid columnCount];
+  NSUInteger rows = [self.grid rowCount];
+  NSUInteger cols = [self.grid columnCount];
   for (NSUInteger i = 0 ; i < rows; i++) {
     for (NSUInteger j = 0 ; j < cols; j++ ){
-      CGRect frame = [grid frameOfCellAtRow:i inColumn:j];
+      CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
       SetCardView* cardView = [[SetCardView alloc] initWithFrame:frame];
-      [self drawRandomPlayingCard:cardView];
       [self.cardsView addSubview:cardView];
+      [self.cards addObject:cardView];
     }
   }
-}
-
-- (IBAction)touchCardButton:(UIButton *)sender {
-//  int chosenButtonIndex = (int) [self.cardViews indexOfObject:sender];
-//  [self.game chooseCardAtIndex:chosenButtonIndex :SET_MODE];
-  [self updateUI];
 }
 
 
 -(void) updateUI
 {
-//  for (UIButton* cardButton in self.cardViews){
-//    int cardButtonIndex = (int) [self.cardViews indexOfObject:cardButton];
-//    Card* card = [self.game cardAtIndex:cardButtonIndex];
-//    if (card.isChosen){
-//      [cardButton layer].borderColor = UIColor.grayColor.CGColor;
-//      [cardButton layer].borderWidth = 1.0;
-//    }
-//    else{
-//      [cardButton layer].borderWidth = 0.0;
-//    }
-//    if ([card isKindOfClass:[SetPlayingCard class]]) {
-//      SetPlayingCard *setCard = (SetPlayingCard *)card;
-//      [cardButton setAttributedTitle:[self createCardString:setCard] forState:UIControlStateNormal];
-//    }
-//    [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
-//    cardButton.enabled = !card.isMatched;
-//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-//  }
-}
-
-- (void)drawRandomPlayingCard : (SetCardView*) setCardView
-{
-    Card *card = [self.deck drawRandomCard];
-    if ([card isKindOfClass:[SetPlayingCard class]]) {
-      SetPlayingCard *setCard = (SetPlayingCard *)card;
-      // todo - set card to someone in view
-      setCardView.rank = setCard.rank;
-      setCardView.suit = setCard.suit;
-      setCardView.color = setCard.color;
-      setCardView.shading = setCard.shading;
+  for (SetCardView* cardView in self.cards){
+    int cardIndex = (int) [self.cards indexOfObject:cardView];
+    SetPlayingCard* card = (SetPlayingCard*) [self.game cardAtIndex:cardIndex];
+    cardView.rank = card.rank;
+    cardView.suit = card.suit;
+    cardView.color = card.color;
+    cardView.shading = card.shading;
+    cardView.chosen = card.isChosen;
+    cardView.alpha = card.isMatched ? 0.5 : 1;
     }
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
 }
 
+
+- (IBAction)tapOnCard:(UITapGestureRecognizer* )sender { // equive to swipe - todo: implement
+  CGPoint tapPoint = [sender locationInView:self.cardsView];
+  float cardWidth = self.cardsView.bounds.size.width / self.grid.rowCount;
+  float cardHieght = self.cardsView.bounds.size.height / self.grid.columnCount;
+  NSUInteger i = tapPoint.x / cardWidth;
+  NSUInteger j = tapPoint.y / cardHieght;
+  NSUInteger chosenViewIndex = j * self.grid.rowCount + i;
+  [self.game chooseCardAtIndex:chosenViewIndex :SET_MODE];
+  [self updateUI];
+}
 
 - (NSString*) titleForCard: (Card*) card
 {
   return card.contents;
 }
+
 
 - (UIImage*) backgroundForCard: (Card*) card
 {
@@ -108,6 +89,7 @@
   [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
   [self createDeck];
+  self.grid = [self createGrid];
   [self addCardsInGrid];
   for (UIView* cardView in [self.cardsView subviews]) {
     if ([cardView isKindOfClass:[SetCardView class]]) {

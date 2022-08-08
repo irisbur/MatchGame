@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSString* color;
 @property (nonatomic, strong) NSString* shading;
 
+@property (nonatomic) BOOL chosen;
+
 - (void) pinch: (UIPinchGestureRecognizer*) gesture;
 
 @end

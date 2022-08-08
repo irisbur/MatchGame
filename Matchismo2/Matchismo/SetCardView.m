@@ -46,6 +46,11 @@
   [self setNeedsDisplay];
 }
 
+- (void) setChosen: (BOOL)chosen {
+  _chosen = chosen;
+  [self setNeedsDisplay];
+}
+
 - (void) setShading :(NSString *) shading {
   _shading = shading;
   [self setNeedsDisplay];
@@ -67,6 +72,7 @@
 #define CORNER_RADIUS 12.0
 
 const static float STRIPE_LINE_GAP = 0.05;
+const static float CHOSEN_WIDTH_FACTOR = 5.0;
 
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
@@ -113,18 +119,23 @@ const static float STRIPE_LINE_GAP = 0.05;
 
 - (void)drawRect:(CGRect)rect {
     // Drawing code
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:
-                                 [self cornerRadius]];
+  UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:
+                               [self cornerRadius]];
 
-    [roundedRect addClip];
+  [roundedRect addClip];
 
-    [[UIColor whiteColor] setFill];
-    UIRectFill(self.bounds);
+  [[UIColor whiteColor] setFill];
+  UIRectFill(self.bounds);
 
-    [[UIColor blackColor] setStroke];
-    [roundedRect stroke];
-
-    [self drawShapes];
+  [[UIColor blackColor] setStroke];
+  if (self.chosen){
+    roundedRect.lineWidth *= CHOSEN_WIDTH_FACTOR;
+  }
+  else {
+    roundedRect.lineWidth /= CHOSEN_WIDTH_FACTOR;
+  }
+  [roundedRect stroke];
+  [self drawShapes];
 }
 
 #pragma mark - Drawing Shapes

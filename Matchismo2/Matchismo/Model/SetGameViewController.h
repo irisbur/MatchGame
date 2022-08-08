@@ -11,8 +11,6 @@
 
 @interface SetGameViewController : ViewController
 
-@property (weak, nonatomic) IBOutlet SetCardView *setCardView;
-
 @end
 
 
