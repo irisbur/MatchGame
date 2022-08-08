@@ -12,9 +12,9 @@
 #import "PlayingCardView.h"
 
 
-@interface ViewController()
+@interface MatchGameViewController()
 
-@property (strong, nonatomic) NSArray* playingCards; // todo - check if of Card?
+@property (strong, nonatomic) NSMutableArray* playingCards; // todo - check if of Card?
 
 @end
 
@@ -32,15 +32,15 @@ const static NSUInteger numberOfCards = 30;
 
 - (void) addCardsInGrid
 {
-  Grid* grid = [self createGrid];
-  NSUInteger rows = [grid rowCount];
-  NSUInteger cols = [grid columnCount];
+  NSUInteger rows = [self.grid rowCount];
+  NSUInteger cols = [self.grid columnCount];
   for (NSUInteger i = 0 ; i < rows; i++) {
     for (NSUInteger j = 0 ; j < cols; j++ ){
-      CGRect frame = [grid frameOfCellAtRow:i inColumn:j];
+      CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
       PlayingCardView* cardView = [[PlayingCardView alloc] initWithFrame:frame];
       [self drawRandomPlayingCard:cardView];
       [self.cardsView addSubview:cardView];
+      [self.cards addObject:cardView];
     }
   }
 }
@@ -53,13 +53,22 @@ const static NSUInteger numberOfCards = 30;
   return card.isChosen ? card.contents: @"";
 }
 
+- (IBAction)touchResetButton {
+  [self.game resetGame:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
+  for (PlayingCardView* cardView in [self.cardsView subviews]) {
+    cardView.faceUp = NO;
+  }
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+  [self updateUI];
+}
+
 - (UIImage*) backgroundForCard: (Card*) card {
   return [UIImage imageNamed: card.isChosen ? @"cardfront" : @"cardback"];
 }
 
-- (void)drawRandomPlayingCard : (PlayingCardView*) playingCardView
-{
+- (void) drawRandomPlayingCard : (PlayingCardView*) playingCardView {
   Card *card = [self.deck drawRandomCard];
+  [self.playingCards addObject:card];
   if ([card isKindOfClass:[PlayingCard class]]) {
       PlayingCard *playingCard = (PlayingCard *)card;
 //     todo - set card to someone in view
@@ -72,9 +81,15 @@ const static NSUInteger numberOfCards = 30;
   return 30;
 }
 
-- (IBAction)swipe:(UISwipeGestureRecognizer *)sender
-{
-  //playingCardView.faceUp = !playingCardView.faceUp;
+- (IBAction) swipe :(UISwipeGestureRecognizer *) sender {
+  CGPoint swipePoint = [sender locationInView:self.cardsView];
+  float cardWidth = self.cardsView.bounds.size.width / self.grid.rowCount;
+  float cardHieght = self.cardsView.bounds.size.height / self.grid.columnCount;
+  NSUInteger i = swipePoint.x / cardWidth;
+  NSUInteger j = swipePoint.y / cardHieght;
+  PlayingCardView* playingCardView = [self.cards objectAtIndex: (j * self.grid.rowCount + i)] ;
+  playingCardView.faceUp = !playingCardView.faceUp;
+  // try to make a match
 }
 
 
@@ -82,6 +97,7 @@ const static NSUInteger numberOfCards = 30;
 {
   [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
+  self.grid = [self createGrid];
   [self addCardsInGrid];
   for (UIView* cardView in [self.cardsView subviews]) {
     if ([cardView isKindOfClass:[PlayingCardView class]]){

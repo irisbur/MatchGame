@@ -16,9 +16,10 @@
 @interface ViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIView *cardsView;
 @property  (strong, nonatomic) Deck* deck;
+@property  (strong, nonatomic) Grid* grid;
 @property  (strong, nonatomic) CardMatchingGame* game;
 @property (nonatomic) NSUInteger minNumOfCards;
-//@property (strong, nonatomic) NSArray* cards; // of Cards?
+@property (strong, nonatomic) NSMutableArray* cards; // of PlayingCardView?
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 //- (IBAction)touchResetButton;
 -(void) updateUI;
