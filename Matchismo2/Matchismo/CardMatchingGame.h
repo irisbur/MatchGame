@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, GameMode) {
 - (void) chooseCardAtIndex:(NSUInteger) index :(NSUInteger) mode;
 - (Card*) cardAtIndex:(NSUInteger) index;
 - (void) resetGame: (NSUInteger)count usingDeck:(Deck *)deck;
-@property (nonatomic, readonly) NSString* gameDescription;
 @property (nonatomic, readonly) NSInteger score;
+@property (nonatomic, readonly) NSUInteger cardsInGame;
 @end
 

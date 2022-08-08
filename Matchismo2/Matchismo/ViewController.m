@@ -12,22 +12,20 @@
 
 @interface ViewController ()
 
-
+@property (nonatomic, readwrite) NSUInteger cardsToRender;
 @end
 
 @implementation ViewController
 
-
-
-
-- (CardMatchingGame*) game{
-  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
-  return _game;
-}
-
 - (NSMutableArray*) cards {
   if (!_cards) _cards = [[NSMutableArray alloc] init];
   return _cards;
+}
+
+- (CardMatchingGame*) game{
+  NSUInteger cardsToRender = self.grid.rowCount * self.grid.columnCount ;
+  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount: cardsToRender usingDeck:[self createDeck]];
+  return _game;
 }
 
 - (Grid*) createGrid {

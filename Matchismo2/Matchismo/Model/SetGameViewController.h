@@ -13,7 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet SetCardView *setCardView;
 
-
 @end
 
 

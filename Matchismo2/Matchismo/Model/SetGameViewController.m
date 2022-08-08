@@ -110,7 +110,7 @@
   [self createDeck];
   [self addCardsInGrid];
   for (UIView* cardView in [self.cardsView subviews]) {
-    if ([cardView isKindOfClass:[SetCardView class]]){
+    if ([cardView isKindOfClass:[SetCardView class]]) {
       [cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:cardView action:@selector(pinch:)]];
     }
   }

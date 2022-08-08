@@ -12,6 +12,7 @@
 //@end
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
+@property (nonatomic, readwrite) NSUInteger cardsInGame;
 @property (nonatomic, strong) NSMutableArray * cards; // of Card
 @property (nonatomic, readwrite) NSMutableArray * chosenCards; // of Card
 
@@ -20,6 +21,7 @@
 
 @implementation CardMatchingGame
 
+static const int kINITIAL_NUM_CARDS = 30;
 static const int MISMATCH_PENALTY = 2;
 static const int MATCH_BONUS = 4;
 static const int COST_TO_CHOOSE = 1;

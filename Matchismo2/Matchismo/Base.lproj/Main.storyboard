@@ -57,7 +57,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="cardsView" destination="Uoa-gy-0uW" id="kp3-Kf-uC4"/>
-                        <outlet property="playingCardsView" destination="Uoa-gy-0uW" id="Ab9-hA-OrD"/>
                         <outlet property="scoreLabel" destination="cQe-Hj-LOx" id="laz-P4-ARp"/>
                     </connections>
                 </viewController>
