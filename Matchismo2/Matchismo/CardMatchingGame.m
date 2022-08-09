@@ -113,6 +113,9 @@ static const int COST_TO_CHOOSE = 1;
     [self.chosenCards addObject:card];
     for (Card* otherCard in self.chosenCards)
     {
+      if (didmatch) {
+        [self.cards removeObject:otherCard]; // todo - if crash this is the first place to check...
+      }
       otherCard.matched = didmatch;
       otherCard.chosen = didmatch;
     }
@@ -124,6 +127,7 @@ static const int COST_TO_CHOOSE = 1;
   }
   card.chosen = YES;
   self.score -= COST_TO_CHOOSE;
+  NSLog(@"num cards in model: %ld", [self.cards count]);
 }
 
 

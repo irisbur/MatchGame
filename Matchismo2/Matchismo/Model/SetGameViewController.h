@@ -11,6 +11,8 @@
 
 @interface SetGameViewController : ViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *DeckEmptyLabel;
+
 @end
 
 

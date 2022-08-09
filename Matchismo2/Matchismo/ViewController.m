@@ -12,7 +12,7 @@
 
 @interface ViewController ()
 
-@property (nonatomic, readwrite) NSUInteger cardsToRender;
+//@property (nonatomic, readwrite) NSUInteger cardsToRender;
 @end
 
 @implementation ViewController
@@ -23,7 +23,7 @@
 }
 
 - (CardMatchingGame*) game{
-  NSUInteger cardsToRender = self.grid.rowCount * self.grid.columnCount ;
+  NSUInteger cardsToRender = self.minNumOfCards;
   if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount: cardsToRender usingDeck:[self createDeck]];
   return _game;
 }
@@ -37,8 +37,14 @@
 }
 
 
+
 - (IBAction)touchResetButton {
-  [self.game resetGame:[[self.cardsView subviews] count] usingDeck:[self createDeck]];
+  [self.game resetGame: self.minNumOfCards usingDeck:[self createDeck]];
+  for (UIView* cardView in self.cards) {
+    [cardView removeFromSuperview];
+  }
+  [self.cards removeAllObjects];
+  [self addCardsInGrid];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
   [self updateUI];
 }
@@ -47,6 +53,10 @@
 {
 }
 
+- (void) addCardsInGrid
+{
+  
+}
 // abstract
 - (NSString*) titleForCard: (Card*) card
 {

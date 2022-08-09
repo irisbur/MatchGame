@@ -13,17 +13,19 @@
 #import "CardMatchingGame.h"
 #import "Grid.h"
 
-@interface ViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *cardsView;
+@interface ViewController : UIViewController\
+
+@property (nonatomic) NSUInteger minNumOfCards;
 @property  (strong, nonatomic) Deck* deck;
 @property  (strong, nonatomic) Grid* grid;
 @property  (strong, nonatomic) CardMatchingGame* game;
-@property (nonatomic) NSUInteger minNumOfCards;
-@property (strong, nonatomic) NSMutableArray* cards; // of PlayingCardView?
+@property (weak, nonatomic) IBOutlet UIView *cardsView;
+@property (strong, nonatomic) NSMutableArray* cards; // of CardView
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-//- (IBAction)touchResetButton;
+
 -(void) updateUI;
 - (Grid*) createGrid;
+- (void) addCardsInGrid;
 
 @end
 

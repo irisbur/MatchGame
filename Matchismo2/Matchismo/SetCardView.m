@@ -71,7 +71,7 @@
 #define CORNER_FONT_STANDARD_HEIGHT 180.0
 #define CORNER_RADIUS 12.0
 
-const static float STRIPE_LINE_GAP = 0.05;
+const static float STRIPE_LINE_GAP = 0.1;
 const static float CHOSEN_WIDTH_FACTOR = 5.0;
 
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
