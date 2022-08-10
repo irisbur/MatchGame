@@ -14,11 +14,12 @@
 
 @interface SetGameViewController()
 
-//@property (nonatomic) NSUInteger numberOfSubViewsRemoved;
-
 @end
 
 @implementation SetGameViewController
+
+const static int kNUM_CARDS_TO_ADD = 3;
+const static float kINITIAL_ANIMATION_POINT = 500.0;
 
 -(NSUInteger) minNumOfCards{
   return 12;
@@ -34,21 +35,39 @@
 
 - (Deck*) createDeck
 {
-  return [[SetCardDeck alloc] init];
+  return  [[SetCardDeck alloc] init];
 }
 
-- (void) addCardsInGrid
+- (void)addCardToGridIn:(SetPlayingCard*) card i:(NSUInteger)i j:(NSUInteger)j animate: (BOOL) doAnimate
+                  t:(NSUInteger) t {
+  __block CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
+  CGPoint originalOrigin = frame.origin;
+  __block SetCardView* cardView = [[SetCardView alloc] initWithFrame:frame];
+  [self initViewWithCard:card cardView:cardView];
+  if (doAnimate) {
+  frame.origin.x = kINITIAL_ANIMATION_POINT;
+  frame.origin.y = kINITIAL_ANIMATION_POINT;
+  cardView.frame = frame;
+    [UIView animateWithDuration:0.5 delay:0.1 * t options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+      frame.origin = originalOrigin;
+      cardView.frame = frame;
+    } completion:nil];
+  }
+  [self.cardsView addSubview:cardView];
+  [self.cards addObject:cardView];
+}
+
+- (void) addCardsInGrid : (BOOL) animate
 {
+  [self removeSubViewsFromCardsView];
   NSUInteger rows = [self.grid rowCount];
   NSUInteger cols = [self.grid columnCount];
   NSUInteger k = 0;
   for (NSUInteger i = 0 ; i < rows; i++) {
     for (NSUInteger j = 0 ; j < cols; j++ ){
-      if (k < self.minNumOfCards){
-        CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
-        SetCardView* cardView = [[SetCardView alloc] initWithFrame:frame];
-        [self.cardsView addSubview:cardView];
-        [self.cards addObject:cardView];
+      if (k < self.game.numberOfCardsInGame){
+        SetPlayingCard* card = (SetPlayingCard*) [self.game cardAtIndex:i*rows+j];
+        [self addCardToGridIn: card i:i j:j animate: animate t:k];
       }
       else {
         break;
@@ -56,23 +75,29 @@
       k++;
     }
   }
-  NSLog(@"subviews count: %ld", [[self.cardsView subviews] count]);
 }
 
 
+- (void) initViewWithCard:(SetPlayingCard *)card cardView:(SetCardView *)cardView {
+  cardView.rank = card.rank;
+  cardView.suit = card.suit;
+  cardView.color = card.color;
+  cardView.shading = card.shading;
+  cardView.chosen = card.isChosen;
+}
+
 -(void) updateUI
 {
+  self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame;
+  [self addCardsInGrid : NO];
   NSMutableArray * removedCards = [[NSMutableArray alloc] init];
   for (SetCardView* cardView in self.cards){
     int cardIndex = (int) [self.cards indexOfObject:cardView];
     SetPlayingCard* card = (SetPlayingCard*) [self.game cardAtIndex:cardIndex];
-    cardView.rank = card.rank;
-    cardView.suit = card.suit;
-    cardView.color = card.color;
-    cardView.shading = card.shading;
-    cardView.chosen = card.isChosen;
+    [self  initViewWithCard:card cardView:cardView];
     if (!card) {
-      [cardView removeFromSuperview]; // todo - fix bug in UI caused from this
+      // animate removal from superview..
+      [cardView removeFromSuperview];
       [removedCards addObject:cardView];
     }
   }
@@ -81,19 +106,71 @@
   }
   [removedCards removeAllObjects];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-  
+}
+
+- (void)reDarwCardsInGrid {
+  [self removeSubViewsFromCardsView];
+  self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame + kNUM_CARDS_TO_ADD;
+  [self addCardsInGrid : NO];
+//  [self updateUI];
+}
+
+- (void)addCardsToGrid {
+  for (int t = 0; t < kNUM_CARDS_TO_ADD ; t++){
+    SetPlayingCard* card = (SetPlayingCard*) [self.deck drawRandomCard];
+    if (card) {
+      NSUInteger cardNumberInGrid = self.game.numberOfCardsInGame;
+      NSUInteger i = cardNumberInGrid / self.grid.rowCount;
+      NSUInteger j = cardNumberInGrid % self.grid.rowCount;
+      [self.game addCardInGame:card];
+      [self addCardToGridIn: card i:i j:j animate:YES t:t];
+    }
+  }
+}
+
+- (BOOL) checkNeedToReDrawGrid {
+  return (self.game.numberOfCardsInGame + kNUM_CARDS_TO_ADD) >
+  (self.grid.rowCount * self.grid.columnCount);
 }
 
 - (IBAction)touchAddCardsButton {
+  if ([self.deck isDeckEmpty]){
+    self.DeckEmptyLabel.text = @"No more cards in the deck";
+  } else {
+    if ([self checkNeedToReDrawGrid]) {
+      [self reDarwCardsInGrid];
+    }
+    [self addCardsToGrid];
+  }
 
 }
 
-- (IBAction)tapOnCard:(UITapGestureRecognizer* )sender { // equive to swipe - todo: implement
+- (BOOL) checkNeedToChangeGridSize {
+  return self.game.numberOfCardsInGame >= self.grid.rowCount * self.grid.columnCount;
+}
+
+- (void) removeSubViewsFromCardsView {
+  for (UIView* cardView in self.cards) {
+    [cardView removeFromSuperview];
+  }
+  [self.cards removeAllObjects];
+}
+
+- (IBAction)touchResetButton {
+  self.deck = [self createDeck];
+  [self.game resetGame: self.minNumOfCards usingDeck: self.deck];
+  self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame;
+  self.DeckEmptyLabel.text = @"";
+  // animate
+  [self addCardsInGrid : YES];
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
+  [self updateUI];
+}
+
+- (IBAction)tapOnCard:(UITapGestureRecognizer* )sender {
   CGPoint tapPoint = [sender locationInView:self.cardsView];
-  float cardWidth = self.cardsView.bounds.size.width / self.grid.rowCount;
-  float cardHieght = self.cardsView.bounds.size.height / self.grid.columnCount;
-  NSUInteger i = tapPoint.x / cardWidth;
-  NSUInteger j = tapPoint.y / cardHieght;
+  NSUInteger i = tapPoint.x / self.grid.cellSize.width;
+  NSUInteger j = tapPoint.y / self.grid.cellSize.height;
   NSUInteger chosenViewIndex = (j * self.grid.rowCount + i);
   if (chosenViewIndex < [self.cards count]){
     [self.game chooseCardAtIndex:chosenViewIndex :SET_MODE];
@@ -116,13 +193,13 @@
 {
   [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
-//  self.numberOfSubViewsRemoved = 0;
-  [self createDeck];
+  self.deck = [self createDeck];
   self.grid = [self createGrid];
-  [self addCardsInGrid];
+  [self addCardsInGrid: NO];
   for (UIView* cardView in [self.cardsView subviews]) {
     if ([cardView isKindOfClass:[SetCardView class]]) {
-      [cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:cardView action:@selector(pinch:)]];
+      [cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:cardView
+                                                                            action:@selector(pinch:)]];
     }
   }
   [self updateUI];

@@ -12,7 +12,7 @@
 
 @interface ViewController ()
 
-//@property (nonatomic, readwrite) NSUInteger cardsToRender;
+
 @end
 
 @implementation ViewController
@@ -24,7 +24,7 @@
 
 - (CardMatchingGame*) game{
   NSUInteger cardsToRender = self.minNumOfCards;
-  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount: cardsToRender usingDeck:[self createDeck]];
+  if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount: cardsToRender usingDeck: self.deck];
   return _game;
 }
 
@@ -37,13 +37,13 @@
 }
 
 
-
 - (IBAction)touchResetButton {
   [self.game resetGame: self.minNumOfCards usingDeck:[self createDeck]];
   for (UIView* cardView in self.cards) {
     [cardView removeFromSuperview];
   }
   [self.cards removeAllObjects];
+//  self.cardsToRender = self.minNumOfCards;
   [self addCardsInGrid];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
   [self updateUI];

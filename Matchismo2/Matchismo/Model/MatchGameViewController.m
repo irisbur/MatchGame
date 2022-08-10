@@ -30,16 +30,21 @@
   return [[PlayingCardDeck alloc] init];
 }
 
-- (void) addCardsInGrid
-{
+- (void) addCardsInGrid {
+  NSUInteger k = 0;
   NSUInteger rows = [self.grid rowCount];
   NSUInteger cols = [self.grid columnCount];
   for (NSUInteger i = 0 ; i < rows; i++) {
     for (NSUInteger j = 0 ; j < cols; j++ ){
-      CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
-      PlayingCardView* cardView = [[PlayingCardView alloc] initWithFrame:frame];
-      [self.cardsView addSubview:cardView];
-      [self.cards addObject:cardView];
+      if (k < self.minNumOfCards) {
+        CGRect frame = [self.grid frameOfCellAtRow:i inColumn:j];
+        PlayingCardView* cardView = [[PlayingCardView alloc] initWithFrame:frame];
+        [self.cardsView addSubview:cardView];
+        [self.cards addObject:cardView];
+      } else {
+        break;
+      }
+      k++;
     }
   }
 }
@@ -64,18 +69,33 @@
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
 }
 
-- (IBAction) swipe :(UISwipeGestureRecognizer *) sender {
+- (NSUInteger)calculateChosenCardIndex:(UISwipeGestureRecognizer *)sender {
   CGPoint swipePoint = [sender locationInView:self.cardsView];
   float cardWidth = self.cardsView.bounds.size.width / self.grid.rowCount;
   float cardHieght = self.cardsView.bounds.size.height / self.grid.columnCount;
   NSUInteger i = swipePoint.x / cardWidth;
   NSUInteger j = swipePoint.y / cardHieght;
   NSUInteger chosenViewIndex = j * self.grid.rowCount + i;
-  PlayingCardView* playingCardView = [self.cards objectAtIndex:chosenViewIndex];
-  [self.game chooseCardAtIndex:chosenViewIndex :MATCH_MODE];
-  playingCardView.faceUp = !playingCardView.faceUp;
+  return chosenViewIndex;
+}
+
+- (IBAction) swipe :(UISwipeGestureRecognizer *) sender {
+  NSUInteger chosenViewIndex = [self calculateChosenCardIndex:sender];
+  if (chosenViewIndex < self.minNumOfCards) {
+    PlayingCardView* playingCardView = [self.cards objectAtIndex:chosenViewIndex];
+    UIViewAnimationOptions option = UIViewAnimationOptionTransitionFlipFromLeft;
+    if (playingCardView.alpha == 1){
+      [UIView transitionWithView:playingCardView duration:0.5 options: option animations: ^{
+        playingCardView.faceUp = !playingCardView.faceUp;
+      } completion: nil];
+    }
+    [self.game chooseCardAtIndex:chosenViewIndex :MATCH_MODE];
+
+  }
   [self updateUI];
 }
+
+
 
 - (void)viewDidLoad
 {

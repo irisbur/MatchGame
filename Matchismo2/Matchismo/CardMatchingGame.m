@@ -11,9 +11,9 @@
 
 //@end
 @interface CardMatchingGame()
+
 @property (nonatomic, readwrite) NSInteger score;
-@property (nonatomic, readwrite) NSUInteger cardsInGame;
-@property (nonatomic, strong) NSMutableArray * cards; // of Card
+@property (nonatomic, strong) NSMutableArray * cardsInGame; // of Card
 @property (nonatomic, readwrite) NSMutableArray * chosenCards; // of Card
 
 @end
@@ -21,15 +21,18 @@
 
 @implementation CardMatchingGame
 
-static const int kINITIAL_NUM_CARDS = 30;
 static const int MISMATCH_PENALTY = 2;
 static const int MATCH_BONUS = 4;
 static const int COST_TO_CHOOSE = 1;
 
-- (NSMutableArray*) cards
+- (NSMutableArray*) cardsInGame
 {
-  if (!_cards) _cards = [[NSMutableArray alloc] init];
-  return _cards;
+  if (!_cardsInGame) _cardsInGame = [[NSMutableArray alloc] init];
+  return _cardsInGame;
+}
+
+- (NSUInteger) numberOfCardsInGame {
+  return [self.cardsInGame count];
 }
 
 - (NSMutableArray*) chosenCards
@@ -47,7 +50,7 @@ static const int COST_TO_CHOOSE = 1;
     for (int i = 0; i < count; i++){
       Card *card = [deck drawRandomCard];
       if (card){
-        [self.cards addObject:card];
+        [self addCardInGame:card];
       }
       else {
         self = nil;
@@ -58,14 +61,18 @@ static const int COST_TO_CHOOSE = 1;
   return self;
 }
 
+- (void) addCardInGame: (Card*) card {
+  [self.cardsInGame addObject:card];
+}
+
 - (void) resetGame: (NSUInteger)count usingDeck:(Deck *)deck
 {
-  [self.cards removeAllObjects];
+  [self.cardsInGame removeAllObjects];
   [self.chosenCards removeAllObjects];
   for (int i = 0; i < count; i++){
     Card *card = [deck drawRandomCard];
     if (card){
-      [self.cards addObject:card];
+      [self addCardInGame:card];
     }
     else {
       break;
@@ -76,12 +83,12 @@ static const int COST_TO_CHOOSE = 1;
 
 - (Card*) cardAtIndex:(NSUInteger)index
 {
-  return (index < [self.cards count]) ? self.cards[index] : nil;
+  return (index < [self.cardsInGame count]) ? self.cardsInGame[index] : nil;
 }
 
 
 - (void)tryMatchMode:(Card *)card {
-  for (Card* otherCard in self.cards) {
+  for (Card* otherCard in self.cardsInGame) {
     if (otherCard.isChosen && !otherCard.isMatched){
       int matchScore = [card match:@[otherCard]];
       if (matchScore){
@@ -114,7 +121,7 @@ static const int COST_TO_CHOOSE = 1;
     for (Card* otherCard in self.chosenCards)
     {
       if (didmatch) {
-        [self.cards removeObject:otherCard]; // todo - if crash this is the first place to check...
+        [self.cardsInGame removeObject:otherCard]; 
       }
       otherCard.matched = didmatch;
       otherCard.chosen = didmatch;
@@ -127,7 +134,6 @@ static const int COST_TO_CHOOSE = 1;
   }
   card.chosen = YES;
   self.score -= COST_TO_CHOOSE;
-  NSLog(@"num cards in model: %ld", [self.cards count]);
 }
 
 

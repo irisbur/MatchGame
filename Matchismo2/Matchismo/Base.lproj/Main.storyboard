@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21208.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="e7l-8e-Xs5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21208.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cew-YK-Ht6">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -103,12 +103,11 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Add cards"/>
                                 <connections>
-                                    <action selector="touchAddCardsButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="3ma-fv-pT4"/>
-                                    <action selector="touchAddCardsButton:" destination="e7l-8e-Xs5" eventType="touchUpInside" id="6VU-ys-kbo"/>
+                                    <action selector="touchAddCardsButton" destination="e7l-8e-Xs5" eventType="touchUpInside" id="KdR-WF-WZc"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-gQ-bag">
-                                <rect key="frame" x="16" y="95" width="358" height="492"/>
+                                <rect key="frame" x="16" y="95" width="358" height="517"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                             </view>

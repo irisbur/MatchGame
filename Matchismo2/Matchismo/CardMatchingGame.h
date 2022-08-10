@@ -17,12 +17,16 @@ typedef NS_ENUM(NSUInteger, GameMode) {
 #define NUM_CARDS_TO_MATCH 3
 
 @interface CardMatchingGame : NSObject
+
 // designated initializer
 - (instancetype) initWithCardCount: (NSUInteger) count usingDeck:(Deck*) deck;
+
+- (void) addCardInGame: (Card*) card;
 - (void) chooseCardAtIndex:(NSUInteger) index :(NSUInteger) mode;
 - (Card*) cardAtIndex:(NSUInteger) index;
 - (void) resetGame: (NSUInteger)count usingDeck:(Deck *)deck;
+
 @property (nonatomic, readonly) NSInteger score;
-@property (nonatomic, readonly) NSUInteger cardsInGame;
+@property (nonatomic, readonly) NSUInteger numberOfCardsInGame;
 @end
 

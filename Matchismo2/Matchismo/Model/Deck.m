@@ -20,6 +20,10 @@
   return _cards;
 }
 
+- (BOOL) isDeckEmpty {
+  return [self.cards count] == 0;
+}
+
 - (void) addCard: (Card*) card atTop:(BOOL) atTop{
   if (atTop){
     [self.cards insertObject:card atIndex:0];
@@ -35,6 +39,7 @@
 
 - (Card*) drawRandomCard{
   Card* randomCard = nil;
+  NSLog(@"cards in deck count: %ld", [self.cards count]);
   if ([self.cards count]){
     unsigned index = arc4random() % [self.cards count];
     randomCard = self.cards[index];
