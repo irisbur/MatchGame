@@ -112,7 +112,6 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
   [self removeSubViewsFromCardsView];
   self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame + kNUM_CARDS_TO_ADD;
   [self addCardsInGrid : NO];
-//  [self updateUI];
 }
 
 - (void)addCardsToGrid {
@@ -142,7 +141,6 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
     }
     [self addCardsToGrid];
   }
-
 }
 
 - (BOOL) checkNeedToChangeGridSize {
@@ -161,10 +159,8 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
   [self.game resetGame: self.minNumOfCards usingDeck: self.deck];
   self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame;
   self.DeckEmptyLabel.text = @"";
-  // animate
-  [self addCardsInGrid : YES];
+  [self addCardsInGrid : YES]; // with animation
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
-  [self updateUI];
 }
 
 - (IBAction)tapOnCard:(UITapGestureRecognizer* )sender {
