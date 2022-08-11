@@ -16,7 +16,7 @@
 
 @end
 
-@implementation SetGameViewController
+@implementation SetGameViewController 
 
 const static int kNUM_CARDS_TO_ADD = 3;
 const static float kINITIAL_ANIMATION_POINT = 500.0;
@@ -48,7 +48,7 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
   frame.origin.x = kINITIAL_ANIMATION_POINT;
   frame.origin.y = kINITIAL_ANIMATION_POINT;
   cardView.frame = frame;
-    [UIView animateWithDuration:0.5 delay:0.1 * t options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+  [UIView animateWithDuration:0.5 delay:0.1 * t options:UIViewAnimationOptionBeginFromCurrentState animations:^{
       frame.origin = originalOrigin;
       cardView.frame = frame;
     } completion:nil];
@@ -119,8 +119,8 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
     SetPlayingCard* card = (SetPlayingCard*) [self.deck drawRandomCard];
     if (card) {
       NSUInteger cardNumberInGrid = self.game.numberOfCardsInGame;
-      NSUInteger i = cardNumberInGrid / self.grid.rowCount;
-      NSUInteger j = cardNumberInGrid % self.grid.rowCount;
+      NSUInteger i = cardNumberInGrid / self.grid.columnCount;
+      NSUInteger j = cardNumberInGrid % self.grid.columnCount;
       [self.game addCardInGame:card];
       [self addCardToGridIn: card i:i j:j animate:YES t:t];
     }
@@ -159,20 +159,24 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
   [self.game resetGame: self.minNumOfCards usingDeck: self.deck];
   self.grid.minimumNumberOfCells = self.game.numberOfCardsInGame;
   self.DeckEmptyLabel.text = @"";
+//  self.in
   [self addCardsInGrid : YES]; // with animation
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", self.game.score];
 }
 
-- (IBAction)tapOnCard:(UITapGestureRecognizer* )sender {
+
+- (IBAction)swipe: (UIGestureRecognizer*)sender {
   CGPoint tapPoint = [sender locationInView:self.cardsView];
   NSUInteger i = tapPoint.x / self.grid.cellSize.width;
   NSUInteger j = tapPoint.y / self.grid.cellSize.height;
-  NSUInteger chosenViewIndex = (j * self.grid.rowCount + i);
+  NSUInteger chosenViewIndex = (j * self.grid.columnCount + i);
   if (chosenViewIndex < [self.cards count]){
     [self.game chooseCardAtIndex:chosenViewIndex :SET_MODE];
   }
   [self updateUI];
 }
+
+
 
 - (NSString*) titleForCard: (Card*) card
 {
@@ -190,7 +194,6 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
   [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
   self.deck = [self createDeck];
-  self.grid = [self createGrid];
   [self addCardsInGrid: NO];
   for (UIView* cardView in [self.cardsView subviews]) {
     if ([cardView isKindOfClass:[SetCardView class]]) {
@@ -198,7 +201,9 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
                                                                             action:@selector(pinch:)]];
     }
   }
-  [self updateUI];
+//  for (UIGestureRecognizer* gesture in [self.view gestureRecognizers]) {
+//    gesture.delegate = self;
+//  }
 }
 
 @end

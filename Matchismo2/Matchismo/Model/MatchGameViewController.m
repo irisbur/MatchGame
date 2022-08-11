@@ -31,6 +31,7 @@
 }
 
 - (void) addCardsInGrid {
+  [self removeSubViewsFromCardsView];
   NSUInteger k = 0;
   NSUInteger rows = [self.grid rowCount];
   NSUInteger cols = [self.grid columnCount];
@@ -79,8 +80,8 @@
   return chosenViewIndex;
 }
 
-- (IBAction) swipe :(UISwipeGestureRecognizer *) sender {
-  NSUInteger chosenViewIndex = [self calculateChosenCardIndex:sender];
+- (IBAction) swipe :(UISwipeGestureRecognizer *) gesture {
+  NSUInteger chosenViewIndex = [self calculateChosenCardIndex:gesture];
   if (chosenViewIndex < self.minNumOfCards) {
     PlayingCardView* playingCardView = [self.cards objectAtIndex:chosenViewIndex];
     UIViewAnimationOptions option = UIViewAnimationOptionTransitionFlipFromLeft;
@@ -93,6 +94,22 @@
 
   }
   [self updateUI];
+}
+
+- (void) removeSubViewsFromCardsView {
+  for (UIView* cardView in self.cards) {
+    [cardView removeFromSuperview];
+  }
+  [self.cards removeAllObjects];
+}
+
+- (void) viewDidLayoutSubviews {
+  [super viewDidLayoutSubviews];
+  if (!self.inPinch) {
+    self.grid = [self createGrid];
+    [self addCardsInGrid];
+    [self updateUI];
+  }
 }
 
 

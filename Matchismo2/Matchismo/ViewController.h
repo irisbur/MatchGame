@@ -23,7 +23,7 @@
 @property (strong, nonatomic) NSMutableArray* cards; // of CardView
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
-//@property (nonatomic) NSUInteger cardsToRender;
+@property (nonatomic) BOOL inPinch;
 
 -(void) updateUI;
 - (Grid*) createGrid;

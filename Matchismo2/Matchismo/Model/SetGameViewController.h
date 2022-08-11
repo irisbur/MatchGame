@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "SetCardView.h"
 
-@interface SetGameViewController : ViewController
+@interface SetGameViewController <UIGestureRecognizerDelegate> : ViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *DeckEmptyLabel;
 
