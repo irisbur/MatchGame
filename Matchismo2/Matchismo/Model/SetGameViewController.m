@@ -201,9 +201,9 @@ const static float kINITIAL_ANIMATION_POINT = 500.0;
                                                                             action:@selector(pinch:)]];
     }
   }
-//  for (UIGestureRecognizer* gesture in [self.view gestureRecognizers]) {
-//    gesture.delegate = self;
-//  }
+  for (UIGestureRecognizer* gesture in [self.view gestureRecognizers]){
+    gesture.delegate = self;
+  }
 }
 
 @end

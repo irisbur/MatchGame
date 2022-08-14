@@ -11,9 +11,10 @@
 
 
 
-@interface ViewController () <UIGestureRecognizerDelegate>
+@interface ViewController()
 
 @property (nonatomic) BOOL didCallLayoutSubViews;
+@property (nonatomic, strong) UIPanGestureRecognizer* panGesture;
 
 
 @end
@@ -56,12 +57,11 @@
 }
 
 - (IBAction)pan:(UIGestureRecognizer*) gesture {
+  
   if (self.inPinch) {
     for (UIView* cardView in self.cards) {
       cardView.center = [gesture locationInView:self.cardsView];
     }
-  } else {
-//    [self swipe: gesture];
   }
 }
 
@@ -71,6 +71,10 @@
 - (IBAction)pinch: (UIPinchGestureRecognizer*) gesture {
   int t = 0;
   if (gesture.state == UIGestureRecognizerStateBegan) {
+    if (!self.inPinch){
+      self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(pan:)];
+      [self.view addGestureRecognizer: self.panGesture];
+    }
     self.inPinch = YES;
     for (UIView* cardView in self.cards) {
       [UIView animateWithDuration:0.5 delay:0.01 * t options:UIViewAnimationOptionBeginFromCurrentState animations:^{
@@ -84,6 +88,7 @@
 - (IBAction)tapOnCardsView:(UITapGestureRecognizer*) gesture {
   int t = 0;
   self.inPinch = NO;
+  [self.view removeGestureRecognizer: self.panGesture];
   for (UIView* cardView in self.cards) {
     [UIView animateWithDuration:0.5 delay:0.01 * t options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -94,6 +99,9 @@
   }
 }
 
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
 
 // abstract
 - (void) addCardsInGrid

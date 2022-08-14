@@ -13,7 +13,7 @@
 #import "CardMatchingGame.h"
 #import "Grid.h"
 
-@interface ViewController : UIViewController\
+@interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic) NSUInteger minNumOfCards;
 @property  (strong, nonatomic) Deck* deck;

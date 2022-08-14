@@ -30,7 +30,6 @@
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="dR7-HD-t4t" appends="YES" id="wQh-VM-JXH"/>
-                                    <outletCollection property="gestureRecognizers" destination="cLk-AY-t72" appends="YES" id="EMk-45-Vo6"/>
                                     <outletCollection property="gestureRecognizers" destination="fwt-Ug-LDj" appends="YES" id="l10-Rv-M23"/>
                                 </connections>
                             </view>
@@ -88,11 +87,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="cLk-AY-t72">
-                    <connections>
-                        <action selector="pan:" destination="BYZ-38-t0r" id="6gk-VE-vib"/>
-                    </connections>
-                </panGestureRecognizer>
                 <swipeGestureRecognizer direction="right" id="dR7-HD-t4t">
                     <connections>
                         <action selector="swipe:" destination="BYZ-38-t0r" id="6tu-h3-HSo"/>
@@ -158,7 +152,6 @@
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="ECX-Sj-XSP" appends="YES" id="D2a-0N-znb"/>
                                     <outletCollection property="gestureRecognizers" destination="thj-W6-EON" appends="YES" id="tFr-8b-WnD"/>
                                     <outletCollection property="gestureRecognizers" destination="mfx-mF-wfs" appends="YES" id="XU5-DK-KVY"/>
                                 </connections>
@@ -212,11 +205,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VRZ-9x-nt0" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="ECX-Sj-XSP">
-                    <connections>
-                        <action selector="pan:" destination="e7l-8e-Xs5" id="Hcz-Mv-uJT"/>
-                    </connections>
-                </panGestureRecognizer>
                 <tapGestureRecognizer id="mfx-mF-wfs">
                     <connections>
                         <action selector="tapOnCardsView:" destination="e7l-8e-Xs5" id="pRh-ay-cc3"/>
